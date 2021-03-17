@@ -5,6 +5,14 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
+
 export class AppComponent {
-  title = 'exercicio-mean';
+
+  livros = []
+
+  adicionarLivro(livro) {
+    let newLivro = { id:this.livros.length + 1, ...livro}
+    this.livros.push(newLivro);
+  }
 }
