@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import Livro from './livros/Livro'
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,7 @@ import { Component } from '@angular/core';
 
 export class AppComponent {
 
-  livros = []
+  livros:Livro[] = []
 
   adicionarLivro(livro) {
     let newLivro = { id:this.livros.length + 1, ...livro}

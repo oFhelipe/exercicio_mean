@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { LivroInserirComponent } from './livros/livro-inserir/livro-inserir.component';
 import { FormsModule } from '@angular/forms';
+import LivroService from './livros/Livro.service'
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
@@ -24,7 +25,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatToolbarModule,
     MatExpansionModule,
   ],
-  providers: [],
+  providers: [LivroService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
