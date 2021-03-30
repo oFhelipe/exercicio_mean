@@ -4,8 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { LivroInserirComponent } from './livros/livro-inserir/livro-inserir.component';
 import { FormsModule } from '@angular/forms';
-import LivroService from './livros/Livro.service'
 
+import { HttpClientModule } from '@angular/common/http'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -24,8 +24,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
+    HttpClientModule
   ],
-  providers: [LivroService],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
