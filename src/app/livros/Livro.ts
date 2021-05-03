@@ -1,5 +1,5 @@
 export default interface Livro {
-  id?: Number;
+  id?: string;
   titulo: String;
   autor: String;
   paginas: String;
