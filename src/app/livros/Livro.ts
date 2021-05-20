@@ -1,6 +1,7 @@
 export default interface Livro {
   id?: string;
-  titulo: String;
-  autor: String;
-  paginas: String;
+  titulo: string;
+  autor: string;
+  paginas: string;
+  imagem?: File | string
 }

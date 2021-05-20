@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import Livro from '../Livro';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import LivroService from '../Livro.service';
+import { mimeTypeValidator } from './mime-type.validator';
 @Component({
   selector: 'app-livro-inserir',
   templateUrl: './livro-inserir.component.html',
@@ -12,6 +13,9 @@ export class LivroInserirComponent implements OnInit {
   private modo: string = 'criar';
   private idLivro: string;
   public livro: Livro;
+  public estaCarregando: boolean = false;
+  form: FormGroup;
+  previewImagem: string;
 
   constructor(
     private livroService: LivroService,
@@ -19,17 +23,36 @@ export class LivroInserirComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.form = new FormGroup({
+      titulo: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      autor: new FormControl(null, { validators: [Validators.required] }),
+      paginas: new FormControl(null, {
+        validators: [Validators.required],
+      }),
+      imagem: new FormControl(null, { validators: [Validators.required], asyncValidators: [mimeTypeValidator] }),
+    });
+
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('idLivro')) {
         this.modo = 'editar';
         this.idLivro = paramMap.get('idLivro');
+        this.estaCarregando = true;
         this.livroService.pegarLivros(this.idLivro).subscribe((dadosCli) => {
+          this.estaCarregando = false;
           this.livro = {
             id: dadosCli._id,
             titulo: dadosCli.titulo,
             paginas: dadosCli.paginas,
             autor: dadosCli.autor,
+            imagem:dadosCli.imagem
           };
+          this.form.setValue({
+            autor: this.livro.autor,
+            paginas: this.livro.paginas,
+            titulo: this.livro.titulo,
+          });
         });
       } else {
         this.modo = 'criar';
@@ -38,26 +61,41 @@ export class LivroInserirComponent implements OnInit {
     });
   }
 
+  onImagemSelecionada(event: Event) {
+    const arquivo = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({ imagem: arquivo });
+    this.form.get('imagem').updateValueAndValidity();
+    console.log(this.form);
+    const reader = new FileReader();    
+    reader.onload = () => { 
+      this.previewImagem = reader.result as string;    
+    }    
+    reader.readAsDataURL(arquivo);
+  }
+
   onClickSalvarLivro(form: NgForm) {
-    if (form.invalid) {
+    if (this.form.invalid) {
       //se o form estiver inválido
+      console.log('entrou')
       return;
     }
+    this.estaCarregando = true;
     if (this.modo === 'criar') {
       const livro: Livro = {
-        titulo: form.value.titulo,
-        autor: form.value.autor,
-        paginas: form.value.paginas,
+        titulo: this.form.value.titulo,
+        autor: this.form.value.autor,
+        paginas: this.form.value.paginas,
+        imagem: this.form.value.imagem
       };
       this.livroService.pushLivro(livro);
     } else {
       this.livroService.atualizarLivro(
         this.idLivro,
-        form.value.titulo,
-        form.value.autor,
-        form.value.paginas
+        this.form.value.titulo,
+        this.form.value.autor,
+        this.form.value.paginas
       );
     }
-    form.resetForm();
+    this.form.reset();
   }
 }

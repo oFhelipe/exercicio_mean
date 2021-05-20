@@ -1,20 +1,66 @@
 <mat-card>
-  <form (submit)="onClickSalvarLivro(bookFormCad)" #bookFormCad="ngForm">
+  <mat-spinner *ngIf="estaCarregando"></mat-spinner>
+  <form
+    [formGroup]="form"
+    (submit)="onClickSalvarLivro()"
+    *ngIf="!estaCarregando"
+  >
     <mat-form-field>
       <mat-label>Titulo</mat-label>
-      <input matInput type="text" placeholder="Titulo" name="titulo" ngModel  required [ngModel]="livro?.titulo"/>
+      <input
+        matInput
+        type="text"
+        placeholder="Titulo"
+        name="titulo"
+        formControlName="titulo"
+        required
+      />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Autor</mat-label>
-      <input matInput type="text" placeholder="Autor" name="autor" ngModel required [ngModel]="livro?.autor"/>
+      <input
+        matInput
+        type="text"
+        placeholder="Autor"
+        name="autor"
+        formControlName="autor"
+        required
+      />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Numero de paginas</mat-label>
-      <input matInput type="text" placeholder="Numero de paginas" name="paginas" ngModel required [ngModel]="livro?.paginas"/>
+      <input
+        matInput
+        type="text"
+        placeholder="Numero de paginas"
+        formControlName="paginas"
+        name="paginas"
+        required
+      />
     </mat-form-field>
 
-    <button color="primary" mat-raised-button>Cadastrar</button>
+    <div id="line-buttons">
+      <button color="primary" (click)="onClickSalvarLivro()" mat-raised-button>Cadastrar</button>
+      <div id="file-input-container">
+        <input
+          type="file"
+          (change)="onImagemSelecionada($event)"
+          #selecionaArquivo
+        />
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="selecionaArquivo.click()"
+        >
+          Selecionar Imagem
+        </button>
+      </div>
+    </div>
+
+    <div class="imagem-preview">
+      <img src="" [alt]="form.value.nome" [src]="previewImagem" *ngIf="previewImagem && previewImagem !== ''"/>
+    </div>
   </form>
 </mat-card>
