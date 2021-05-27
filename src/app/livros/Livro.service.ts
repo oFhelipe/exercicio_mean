@@ -80,8 +80,8 @@ class LivroService {
     }>(`http://localhost:3333/api/livros/${idLivro}`);
   }
 
-  atualizarLivro(id: string, titulo: string, autor: string, paginas: string) {
-    const livro: Livro = { id, titulo, autor, paginas };
+  atualizarLivro(id: string, titulo: string, autor: string, paginas: string, imagem: File | string) {
+    const livro: Livro = { id, titulo, autor, paginas, imagem };
     this.httpClient
       .put(`http://localhost:3333/api/livros/${id}`, livro)
       .subscribe((res) => {

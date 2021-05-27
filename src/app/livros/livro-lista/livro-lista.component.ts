@@ -13,6 +13,9 @@ export class LivroListaComponent implements OnInit, OnDestroy{
   constructor(public livroService:LivroService){}
   livros: Livro[] = []
   private livrosSubscription: Subscription;
+  totalDeLivros: number = 10;
+  totalDeLivrosPorPagina: number = 2;
+  opcoesTotalDeLivrosPorPagina = [2, 5, 10];
 
   ngOnInit(): void {
     this.livroService.getLivros();

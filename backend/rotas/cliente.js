@@ -41,12 +41,18 @@ router.get("/", async (req, res) => {
     });
   });
   
-  router.put("/:id", (req, res, next) => {
+  router.put("/:id", multer({ storage: armazenamento }).single('imagem'), (req, res, next) => {
+    let imagemURL = req.body.imagemURL;//tentamos pegar a URL já existente  
+    if (req.file) { //mas se for um arquivo, montamos uma nova    
+      const url = req.protocol + "://" + req.get("host");    
+      imagemURL = url + "/imagens/" + req.file.filename;  
+    }
     const livro = new LivroModel({
       _id: req.params.id,
       titulo: req.body.titulo,
       paginas: req.body.paginas,
       autor: req.body.autor,
+      imagemURL: imagemURL
     });
     LivroModel.updateOne({ _id: req.params.id }, livro).then((resultado) => {
       console.log(resultado);
